@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Cailewey</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial;
+}
+
+body{
+
+height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+
+background:url("https://images.unsplash.com/photo-1558981359-219d6364c9c8") center/cover;
+}
+
+.overlay{
+position:absolute;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.55);
+}
+
+.card{
+
+position:relative;
+z-index:2;
+
+background:white;
+
+width:340px;
+
+padding:30px;
+
+border-radius:15px;
+
+box-shadow:0 10px 30px rgba(0,0,0,0.4);
+
+text-align:center;
+
+}
+
+.hidden{
+display:none;
+}
+
+h1{
+margin-bottom:5px;
+}
+
+p{
+color:#666;
+margin-bottom:20px;
+}
+
+input,select{
+
+width:100%;
+padding:12px;
+margin:8px 0;
+
+border-radius:8px;
+border:1px solid #ccc;
+
+}
+
+button{
+
+width:100%;
+padding:14px;
+margin-top:10px;
+
+border:none;
+border-radius:8px;
+
+cursor:pointer;
+
+font-size:15px;
+
+}
+
+.main{
+background:black;
+color:white;
+}
+
+.sos{
+background:red;
+color:white;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="overlay"></div>
+
+<!-- pantalla inicio -->
+
+<div class="card" id="inicio">
+
+<h1>Cailewey</h1>
+<p>Tu amigo en el camino</p>
+
+<button class="main" onclick="abrirServicios()">
+Ver servicios
+</button>
+
+</div>
+
+<!-- pantalla servicios -->
+
+<div class="card hidden" id="servicios">
+
+<h2>Solicitar asistencia</h2>
+
+<input id="nombre" placeholder="Nombre">
+
+<input id="moto" placeholder="Marca de moto">
+
+<select id="servicio">
+
+<option value="Gasolina">⛽ Gasolina</option>
+<option value="Aceite">🛢 Aceite</option>
+<option value="Parche">🩹 Parche</option>
+<option value="Batería">🔋 Batería</option>
+
+</select>
+
+<button class="main" onclick="enviar()">
+Pedir servicio
+</button>
+
+<button onclick="volver()">
+Volver
+</button>
+
+</div>
+
+<script>
+
+const API="https://script.google.com/macros/s/AKfycbwZkf_G7QssT2vCN9TIHIyK6behbJfqUHKReqAEISsLjJ_QZZh9meXObWpVWV5bLUaK/exec"
+
+function abrirServicios(){
+
+document.getElementById("inicio").classList.add("hidden")
+document.getElementById("servicios").classList.remove("hidden")
+
+}
+
+function volver(){
+
+document.getElementById("servicios").classList.add("hidden")
+document.getElementById("inicio").classList.remove("hidden")
+
+}
+
+function enviar(){
+
+let nombre=document.getElementById("nombre").value
+let moto=document.getElementById("moto").value
+let servicio=document.getElementById("servicio").value
+
+navigator.geolocation.getCurrentPosition(function(pos){
+
+fetch(API,{
+
+method:"POST",
+
+headers:{
+"Content-Type":"text/plain;charset=utf-8"
+},
+
+body:JSON.stringify({
+
+usuario:nombre,
+moto:moto,
+servicio:servicio,
+lat:pos.coords.latitude,
+lng:pos.coords.longitude
+
+})
+
+})
+
+.then(r=>r.text())
+.then(d=>{
+
+alert("Solicitud enviada")
+
+document.getElementById("nombre").value=""
+document.getElementById("moto").value=""
+
+})
+
+})
+
+}
+
+</script>
+
+</body>
+</html>
