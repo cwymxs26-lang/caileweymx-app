@@ -17,13 +17,11 @@ font-family:Arial;
 }
 
 body{
-
 height:100vh;
 display:flex;
 align-items:center;
 justify-content:center;
-
-background:url("https://images.unsplash.com/photo-1558981359-219d6364c9c8") center/cover;
+background:url("https://images.unsplash.com/photo-1558981359-219d6364c9c8") center/cover no-repeat;
 }
 
 .overlay{
@@ -44,7 +42,7 @@ width:340px;
 
 padding:30px;
 
-border-radius:15px;
+border-radius:14px;
 
 box-shadow:0 10px 30px rgba(0,0,0,0.4);
 
@@ -60,8 +58,8 @@ h1{
 margin-bottom:5px;
 }
 
-p{
-color:#666;
+.subtitle{
+color:#777;
 margin-bottom:20px;
 }
 
@@ -69,6 +67,7 @@ input,select{
 
 width:100%;
 padding:12px;
+
 margin:8px 0;
 
 border-radius:8px;
@@ -79,7 +78,9 @@ border:1px solid #ccc;
 button{
 
 width:100%;
+
 padding:14px;
+
 margin-top:10px;
 
 border:none;
@@ -96,11 +97,6 @@ background:black;
 color:white;
 }
 
-.sos{
-background:red;
-color:white;
-}
-
 </style>
 
 </head>
@@ -114,7 +110,7 @@ color:white;
 <div class="card" id="inicio">
 
 <h1>Cailewey</h1>
-<p>Tu amigo en el camino</p>
+<p class="subtitle">Tu amigo en el camino</p>
 
 <button class="main" onclick="abrirServicios()">
 Ver servicios
@@ -153,7 +149,7 @@ Volver
 
 <script>
 
-const API="https://script.google.com/macros/s/AKfycbwZkf_G7QssT2vCN9TIHIyK6behbJfqUHKReqAEISsLjJ_QZZh9meXObWpVWV5bLUaK/exec"
+const API="https://script.google.com/macros/s/AKfycbxpca6elZweCJOVoNsS25xhZWeJQ7VsLloAVKnN1YH5Rvd7vVXhds2BnLCuU2ZEyTaq/exec"
 
 function abrirServicios(){
 
@@ -200,7 +196,7 @@ lng:pos.coords.longitude
 .then(r=>r.text())
 .then(d=>{
 
-alert("Solicitud enviada")
+alert("Solicitud enviada correctamente")
 
 document.getElementById("nombre").value=""
 document.getElementById("moto").value=""
