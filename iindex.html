@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Cailewey</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial;
+}
+
+body{
+height:100vh;
+background:#f3f3f3;
+}
+
+/* pantallas */
+
+.screen{
+display:flex;
+align-items:center;
+justify-content:center;
+height:100vh;
+}
+
+.hidden{
+display:none;
+}
+
+/* tarjetas */
+
+.card{
+
+background:white;
+padding:30px;
+
+width:320px;
+
+border-radius:12px;
+
+box-shadow:0 10px 25px rgba(0,0,0,0.2);
+
+text-align:center;
+
+}
+
+.card h1{
+margin-bottom:10px;
+}
+
+.card p{
+color:#777;
+margin-bottom:20px;
+}
+
+input{
+
+width:100%;
+padding:12px;
+
+margin:8px 0;
+
+border-radius:8px;
+border:1px solid #ccc;
+
+}
+
+/* botones */
+
+button{
+
+width:100%;
+padding:14px;
+
+border:none;
+border-radius:8px;
+
+margin-top:10px;
+
+cursor:pointer;
+font-size:15px;
+
+}
+
+.main{
+background:black;
+color:white;
+}
+
+.secondary{
+background:#eee;
+}
+
+.sos{
+background:red;
+color:white;
+}
+
+/* panel app */
+
+.appPanel{
+
+position:fixed;
+
+bottom:0;
+width:100%;
+
+background:white;
+
+padding:20px;
+
+border-radius:20px 20px 0 0;
+
+box-shadow:0 -5px 20px rgba(0,0,0,0.2);
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- LOGIN -->
+
+<div class="screen" id="login">
+
+<div class="card">
+
+<h1>Cailewey</h1>
+<p>Tu amigo en el camino</p>
+
+<input id="login_nombre" placeholder="Nombre">
+<input id="login_tel" placeholder="Teléfono">
+
+<button class="main" onclick="entrar()">Entrar</button>
+
+<button onclick="abrirRegistro()">Crear cuenta</button>
+
+</div>
+
+</div>
+
+<!-- REGISTRO -->
+
+<div class="screen hidden" id="registro">
+
+<div class="card">
+
+<h2>Crear cuenta</h2>
+
+<input id="reg_nombre" placeholder="Nombre">
+<input id="reg_tel" placeholder="Teléfono">
+
+<button class="main" onclick="crearCuenta()">Registrar</button>
+
+<button class="secondary" onclick="volverLogin()">Volver</button>
+
+</div>
+
+</div>
+
+<!-- APP -->
+
+<div id="app" class="hidden">
+
+<div class="appPanel">
+
+<h3>Asistencia motocicletas</h3>
+
+<button class="main" onclick="asistencia()">
+Solicitar asistencia
+</button>
+
+<button class="sos" onclick="sos()">
+SOS emergencia
+</button>
+
+<button class="secondary" onclick="logout()">
+Cerrar sesión
+</button>
+
+</div>
+
+</div>
+
+<script>
+
+const API="https://script.google.com/macros/s/AKfycbwZkf_G7QssT2vCN9TIHIyK6behbJfqUHKReqAEISsLjJ_QZZh9meXObWpVWV5bLUaK/exec"
+
+let usuario=""
+let telefono=""
+
+/* login */
+
+function entrar(){
+
+usuario=document.getElementById("login_nombre").value
+telefono=document.getElementById("login_tel").value
+
+document.getElementById("login").classList.add("hidden")
+document.getElementById("app").classList.remove("hidden")
+
+}
+
+/* registro */
+
+function abrirRegistro(){
+
+document.getElementById("login").classList.add("hidden")
+document.getElementById("registro").classList.remove("hidden")
+
+}
+
+function volverLogin(){
+
+document.getElementById("registro").classList.add("hidden")
+document.getElementById("login").classList.remove("hidden")
+
+}
+
+function crearCuenta(){
+
+let nombre=document.getElementById("reg_nombre").value
+let tel=document.getElementById("reg_tel").value
+
+fetch(API,{
+
+method:"POST",
+
+headers:{
+"Content-Type":"text/plain;charset=utf-8"
+},
+
+body:JSON.stringify({
+
+usuario:nombre,
+telefono:tel,
+servicio:"registro",
+lat:0,
+lng:0
+
+})
+
+})
+
+.then(r=>r.text())
+.then(d=>{
+
+alert("Cuenta creada")
+
+volverLogin()
+
+})
+
+}
+
+/* asistencia */
+
+function asistencia(){
+
+navigator.geolocation.getCurrentPosition(function(pos){
+
+fetch(API,{
+
+method:"POST",
+
+headers:{
+"Content-Type":"text/plain;charset=utf-8"
+},
+
+body:JSON.stringify({
+
+usuario:usuario,
+telefono:telefono,
+servicio:"asistencia moto",
+lat:pos.coords.latitude,
+lng:pos.coords.longitude
+
+})
+
+})
+
+alert("Asistencia solicitada")
+
+})
+
+}
+
+/* SOS */
+
+function sos(){
+
+navigator.geolocation.getCurrentPosition(function(pos){
+
+fetch(API,{
+
+method:"POST",
+
+headers:{
+"Content-Type":"text/plain;charset=utf-8"
+},
+
+body:JSON.stringify({
+
+usuario:usuario,
+telefono:telefono,
+servicio:"SOS",
+lat:pos.coords.latitude,
+lng:pos.coords.longitude
+
+})
+
+})
+
+alert("SOS enviado")
+
+})
+
+}
+
+/* logout */
+
+function logout(){
+
+document.getElementById("app").classList.add("hidden")
+document.getElementById("login").classList.remove("hidden")
+
+}
+
+</script>
+
+</body>
+</html>
